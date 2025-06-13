@@ -1,3 +1,7 @@
-# Ignorar archivos temporales o de configuración locales si los hubiera
-# .env (aunque el frontend generalmente no tiene .env, es buena práctica si lo hubiera)
-# node_modules/ (si usas alguna herramienta de build en el frontend)
+# Ignorar la carpeta de módulos de node si la usas en el frontend
+node_modules/
+# Ignorar archivos de configuración de entorno si los hubiera (ej. .env)
+.env
+# Ignorar archivos de editor o temporales específicos si los hubiera
+.vscode/
+*.logd)
