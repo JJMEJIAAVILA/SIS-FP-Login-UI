@@ -11,46 +11,50 @@
 <body>
 <div class="bg-overlay"></div>
 
-<main class="login-wrapper"> <div class="login-container">
-    <div class="logo-container">
-        <i class="fas fa-shield-alt logo-icon"></i>
-        <h1>Registro de Usuario <span>SIS-FP</span></h1>
+<main class="login-wrapper">
+    <div class="login-container">
+        <div class="logo-container">
+            <i class="fas fa-shield-alt logo-icon"></i>
+            <h1>Registro de Usuario <span>SIS-FP</span></h1>
+        </div>
+
+        <form id="registerForm" class="login-form">
+            <div class="input-group">
+                <label for="regUsuario">
+                    <i class="fas fa-user"></i> Nombre de Usuario
+                </label>
+                <input type="text" id="regUsuario" placeholder="Ingrese su nombre de usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regEmail">
+                    <i class="fas fa-envelope"></i> Correo Electrónico
+                </label>
+                <input type="email" id="regEmail" placeholder="Ingrese su correo electrónico" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regContrasena">
+                    <i class="fas fa-lock"></i> Contraseña
+                </label>
+                <input type="password" id="regContrasena" placeholder="Ingrese su contraseña" required>
+                <i class="fas fa-eye toggle-password" id="togglePasswordReg"></i>
+            </div>
+
+            <div class="g-recaptcha" data-sitekey="6LdKkF0rAAAAAP_qPjghiVM_WLnrroA5T6l-Hh-k"></div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Registrarse
+                </button>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Inicio de Sesión
+                </a>
+            </div>
+        </form>
     </div>
-
-    <form id="registerForm" class="login-form"> <div class="input-group">
-        <label for="regUsuario">
-            <i class="fas fa-user"></i> Nombre de Usuario
-        </label>
-        <input type="text" id="regUsuario" placeholder="Ingrese su nombre de usuario" required>
-    </div>
-
-        <div class="input-group">
-            <label for="regEmail">
-                <i class="fas fa-envelope"></i> Correo Electrónico
-            </label>
-            <input type="email" id="regEmail" placeholder="Ingrese su correo electrónico" required>
-        </div>
-
-        <div class="input-group">
-            <label for="regContrasena">
-                <i class="fas fa-lock"></i> Contraseña
-            </label>
-            <input type="password" id="regContrasena" placeholder="Ingrese su contraseña" required>
-        </div>
-
-        <div class="g-recaptcha" data-sitekey="6LdKkF0rAAAAAP_qPjghiVM_WLnrroA5T6l-Hh-k"></div>
-
-        <div class="button-group">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-user-plus"></i> Registrarse
-            </button>
-            <a href="index.html" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Volver al Inicio de Sesión
-            </a>
-        </div>
-    </form>
-</div>
 </main>
 
-<script src="assets/js/register.js"></script> </body>
+<script src="assets/js/register.js"></script>
+</body>
 </html>

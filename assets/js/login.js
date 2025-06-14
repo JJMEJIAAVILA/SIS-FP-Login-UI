@@ -18,7 +18,8 @@ function showAlert(message, type) {
     alertDiv.className = `alert-message alert-${type}`;
     alertDiv.textContent = message;
 
-    form.appendChild(alertDiv); // Adjuntar la alerta al formulario
+    // Insertar la alerta antes del primer input-group o al inicio del formulario
+    form.prepend(alertDiv); // Mejor prepend para que aparezca arriba del formulario
 
     if (type !== 'loading') {
         setTimeout(() => {
@@ -57,6 +58,8 @@ window.handleGoogleSignIn = async function(response) {
 
             showAlert('¡Inicio de sesión con Google exitoso!', 'success');
             setTimeout(() => {
+                // Redirige a una página existente (ej. dashboard.html o index.html)
+                // Asegúrate de que esta ruta sea correcta para tu proyecto
                 window.location.href = 'inicio_sesion_exitoso.html';
             }, 1000);
         } else {
@@ -69,28 +72,36 @@ window.handleGoogleSignIn = async function(response) {
 };
 
 
-// --- CÓDIGO QUE SE EJECUTA CUANDO EL DOCUMENTO ESTÁ LISTO (DOMContentLoad) ---
+// --- CÓDIGO QUE SE EJECUTA CUANDO EL DOCUMENTO ESTÁ LISTO (DOMContentLoaded) ---
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('contrasena');
 
-    // Función para mostrar/ocultar contraseña (esto está bien aquí dentro)
-    if (togglePassword) {
+    // Lógica para mostrar/ocultar contraseña (Corrección de clases aquí)
+    if (togglePassword && passwordInput) { // Verifica si ambos elementos fueron encontrados
         togglePassword.addEventListener('click', function() {
+            console.log("¡Clic en el ojo!"); // Mensaje de depuración
+            // Alternar el tipo del input entre 'password' y 'text'
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
+
+            // Alternar el icono del ojo: de abierto a cerrado y viceversa
+            // fa-eye es el ojo abierto, fa-eye-slash es el ojo tachado (cerrado)
+            this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
+    } else {
+        console.log("No se encontraron los elementos 'togglePassword' o 'passwordInput'."); // Mensaje de depuración
     }
 
-    // Manejar el envío del formulario de login (esto está bien aquí dentro)
+    // Manejar el envío del formulario de login
     if (loginForm) { // Asegúrate de que el formulario de login existe
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const usuario = document.getElementById('usuario').value.trim();
-            const contrasena = passwordInput.value.trim();
+            const contrasena = passwordInput.value.trim(); // Usar passwordInput directamente
 
             if (!usuario || !contrasena) {
                 showAlert('Por favor, complete todos los campos', 'error');
@@ -99,9 +110,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let recaptchaResponse = '';
             try {
-                recaptchaResponse = grecaptcha.getResponse();
-                if (!recaptchaResponse) {
-                    showAlert('Por favor, complete la verificación reCAPTCHA.', 'error');
+                // grecaptcha solo está disponible si el script de reCAPTCHA se cargó correctamente
+                if (typeof grecaptcha !== 'undefined') {
+                    recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        showAlert('Por favor, complete la verificación reCAPTCHA.', 'error');
+                        return;
+                    }
+                } else {
+                    console.error('grecaptcha no está definido. Asegúrese de que el script de reCAPTCHA se cargue correctamente.');
+                    showAlert('Error al cargar reCAPTCHA. Intente recargar la página.', 'error');
                     return;
                 }
             } catch (error) {
@@ -114,9 +132,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Función para autenticar usuario REAL (esto está bien aquí dentro)
+    // Función para autenticar usuario
     async function authenticateUser(username, password, recaptchaResponse) {
-        showAlert('Verificando credenciales...', 'loading'); // Esta llamada a showAlert funciona porque está dentro del mismo ámbito.
+        showAlert('Verificando credenciales...', 'loading');
 
         try {
             const response = await fetch('http://localhost:3000/api/login', {
@@ -139,19 +157,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 showAlert('¡Inicio de sesión exitoso!', 'success');
                 setTimeout(() => {
+                    // Redirige a una página existente (ej. dashboard.html o index.html)
+                    // Asegúrate de que esta ruta sea correcta para tu proyecto
                     window.location.href = 'inicio_sesion_exitoso.html';
                 }, 1000);
 
             } else {
                 showAlert(data.message || 'Credenciales incorrectas. Intente nuevamente.', 'error');
-                if (grecaptcha && typeof grecaptcha.reset === 'function') {
+                // Siempre reiniciar reCAPTCHA en caso de error de credenciales
+                if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.reset === 'function') {
                     grecaptcha.reset();
                 }
             }
         } catch (error) {
             console.error('Error durante la petición de autenticación:', error);
             showAlert('Error de conexión con el servidor. Intente más tarde.', 'error');
-            if (grecaptcha && typeof grecaptcha.reset === 'function') {
+            // Siempre reiniciar reCAPTCHA en caso de error de conexión
+            if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.reset === 'function') {
                 grecaptcha.reset();
             }
         }

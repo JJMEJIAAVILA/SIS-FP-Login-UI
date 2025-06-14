@@ -58,7 +58,7 @@ h1 span {
 }
 
 .input-group {
-   position: relative;
+   position: relative; /* CRUCIAL: Necesario para que el icono absolute se posicione correctamente */
 }
 
 .input-group label {
@@ -79,6 +79,8 @@ h1 span {
    font-size: 1rem;
    transition: all 0.3s ease;
    box-sizing: border-box;
+   /* Ajustar padding-right para que el texto no quede debajo del ojo */
+   padding-right: 45px; /* Deja espacio para el ojo */
 }
 
 .input-group input:focus {
@@ -87,13 +89,24 @@ h1 span {
    box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.2);
 }
 
+/* Estilos para el icono de mostrar/ocultar contraseña */
 .toggle-password {
    position: absolute;
-   right: 15px;
-   top: 50%;
-   transform: translateY(50%);
-   color: #555;
+   right: 15px; /* Distancia desde el borde derecho */
+   /* --- CAMBIO CRÍTICO AQUÍ: Centrado vertical y alineado con el input --- */
+   top: 50%; /* Posiciona el borde superior del icono en el centro vertical del input-group */
+   transform: translateY(-50%); /* Desplaza el icono hacia arriba el 50% de su propia altura para centrarlo */
+   /* --- FIN DEL CAMBIO --- */
+   color: #555; /* Color del icono */
    cursor: pointer;
+   font-size: 1.2rem; /* Tamaño del icono */
+   z-index: 10; /* Asegura que el icono esté por encima del input */
+   /* Ajuste visual para que quede más cerca del campo de input y no de la etiqueta */
+   /* Calcular el top para que esté a la altura del input, no de todo el input-group */
+   /* Asumiendo que el input tiene una altura de ~38px y padding de 0.9rem */
+   /* Puedes ajustar 'top' si el 50% no es el ideal para tu layout */
+   top: calc(50% + 10px); /* Ajuste basado en tu layout, si 50% no lo centra bien. +10px para bajarlo un poco */
+   /* Si el label es grande, 50% toma todo el input-group. Ajusta este top según la altura real de tu input */
 }
 
 /* Estilos para los botones y enlaces */
@@ -197,22 +210,22 @@ h1 span {
 /* Estilos responsivos */
 @media (max-width: 480px) {
    .login-wrapper {
-       padding: 1rem;
+      padding: 1rem;
    }
-   
+
    .login-container {
-       padding: 1.5rem;
+      padding: 1.5rem;
    }
-   
+
    h1 {
-       font-size: 1.3rem;
+      font-size: 1.3rem;
    }
-   
+
    h1 span {
-       font-size: 1.5rem;
+      font-size: 1.5rem;
    }
-   
+
    .btn {
-       max-width: 100%;
+      max-width: 100%;
    }
 }
